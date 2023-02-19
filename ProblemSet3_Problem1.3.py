@@ -9,7 +9,7 @@ plt.rcParams['font.size'] = 16
 # setting physical parameters for advection and diffusion
 R0 = 3
 m = 3
-nu = 1
+nu = 0.1
 
 # setting parameters for numerical solving
 Ngrid = 500
@@ -22,8 +22,8 @@ x = np.arange(0, 50*1.0, dx) / 50
 r = x[1:]*R0 
 
 # getting the factors to be used in the solving
-#u = -np.mean(3*nu/r)
-u = -1
+u = -np.mean(3*nu/r)
+#print(dt, '<=', np.abs(dx/u))  # checking for stability
 alpha = u*dt/(2*dx)
 D = 3*nu
 beta = D*dt/dx**2
@@ -77,7 +77,9 @@ plt.show()
 # commented out because saving takes some time
 # the animation can be seen by running the file as it is with the plotting above
 
-'''for n in range(Nsteps):
+
+'''f = (1/np.sqrt(2*np.pi)/std) * np.exp(-(x-0.5)**2/(2*std**2))
+for n in range(Nsteps):
 
     # advection step
     f[1:Ngrid-1] = 0.5*(f[2:] + f[:Ngrid-2]) - alpha*(f[2:] - f[:Ngrid-2])
@@ -101,7 +103,7 @@ plt.show()
 frames = []
 for n in range(Nsteps):
     if n % 10 == 0:
-        image = imageio.imread(f'distribution{n}.png')
+        image = imageio.imread('distribution{}.png'.format(n))
         frames.append(image)
 
 imageio.mimsave('animation.gif', # output gif
